@@ -9,7 +9,6 @@ class Isolate:
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
-        print(stdout)
         if stderr:
             raise Exception('Could not initialize a new isolate box: ' + stderr.decode('utf-8').strip())
         return stdout.decode('utf-8').strip()
@@ -26,7 +25,7 @@ class Isolate:
         args = [
             '--run', 
             '--box-id', str(self.box_id),
-            #  '-E','HOME=/tmp',
+             '-E','HOME=/tmp',
             '--time', '2',
             '-p60',
             # '--mem', '128000',
@@ -35,13 +34,10 @@ class Isolate:
             '--silent',
             '-d', '/etc:noexec',
             ] + commands
-        print(" ".join(args))
         process = subprocess.run(['isolate'] + args,
                             input=stdin_str,
                             text = True,
                             capture_output=True)
-        print(process.stdout)
-        print(process.stderr)
         return process.stdout, process.stderr
 
     def _pick_free_box(self):
