@@ -28,9 +28,10 @@ class Isolate:
             '--box-id', str(self.box_id),
             #  '-E','HOME=/tmp',
             '--time', '2',
+            '-p60',
             # '--mem', '128000',
             # '--stack', '64000',
-            # '--env', 'PATH=/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:toolchain-dir-absolute-path',
+            '--env', 'PATH=/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:toolchain-dir-absolute-path',
             '--silent',
             '-d', '/etc:noexec',
             ] + commands

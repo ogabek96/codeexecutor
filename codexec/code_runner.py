@@ -14,8 +14,12 @@ class CodeRunner:
                 'run_cmd': ['/usr/bin/java', 'Solution']
             },
             'cpp': {
-                'compile_cmd': ['/usr/bin/c++', 'solution.cpp', '-o', 'solution'],
-                'run_cmd': ['./solution']
+                'compile_cmd': ['/usr/bin/c++', 'solution.cpp'],
+                'run_cmd': ['./a.out']
+            },
+            'go': {
+                'compile_cmd': None,
+                'run_cmd': ['/usr/bin/go', 'run', 'solution.go']
             }
         }
 
