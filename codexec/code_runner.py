@@ -1,6 +1,5 @@
 from codexec.isolate import Isolate
 
-
 class CodeRunner:
 
     def __init__(self) -> None:
@@ -40,10 +39,14 @@ class CodeRunner:
         file_name = self.lng[src_language]['file_name']
         try:
             self._copy_source_code(box_path, file_name, source_code)
-            self._compile_source_code(isolate_box, src_language)
+            # compile code
+            _, cmp_err = self._compile_source_code(isolate_box, src_language)
+            if cmp_err != "" and cmp_err != None:
+                return { 'stdout': '', 'stderr': cmp_err }
+            # run code
             stdout, stderr = isolate_box.run_command(
                 self.lng[src_language]['run_cmd'], stdin)
-            return stdout, stderr
+            return { 'stdout': stdout, 'stderr': stderr }
         except:
             print("Error running single input code")
         finally:
