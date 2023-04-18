@@ -1,7 +1,7 @@
+import threading
 from codexec.isolate import Isolate
 
 class CodeRunner:
-
     def __init__(self) -> None:
         self.lng = {
             'python3': {
@@ -31,16 +31,14 @@ class CodeRunner:
             }
         }
 
-    def run_code_single_input(self, source_code,
-                              src_language, stdin):
+    def run_code_single_input(self, source_code, src_language, stdin):
         isolate_box = Isolate()
-
         box_path = isolate_box.init_box()
         file_name = self.lng[src_language]['file_name']
         try:
             self._copy_source_code(box_path, file_name, source_code)
             # compile code
-            _, cmp_err = self._compile_source_code(isolate_box, src_language)
+            _, cmp_err = self._compile_source_code(src_language)
             if cmp_err != "" and cmp_err != None:
                 return { 'stdout': '', 'stderr': cmp_err }
             # run code
@@ -52,17 +50,15 @@ class CodeRunner:
         finally:
             isolate_box.cleanup()
 
-    def run_code_multiple_input(self, source_code,
-                                src_language, stdin_list):
+    def run_code_multiple_input(self, source_code, src_language, stdin_list):
         stdout_list = []
 
         isolate_box = Isolate()
-
         box_path = isolate_box.init_box()
         file_name = self.lng[src_language]['file_name']
         try:
             self._copy_source_code(box_path, file_name, source_code)
-            self._compile_source_code(isolate_box, src_language)
+            self._compile_source_code(src_language)
             for stdin in stdin_list:
                 stdout, stderr = isolate_box.run_command(
                     self.lng[src_language]['run_cmd'], stdin)
@@ -71,9 +67,9 @@ class CodeRunner:
             isolate_box.cleanup()
         return stdout_list
 
-    def _compile_source_code(self, isolate_box, code_lang):
+    def _compile_source_code(self, code_lang):
         if self.lng[code_lang]['compile_cmd']:
-            stdout, stderr = isolate_box.run_command(
+            stdout, stderr = self.isolate_box.run_command(
                 self.lng[code_lang]['compile_cmd'])
             return stdout, stderr
         return None, None
